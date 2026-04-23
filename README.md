@@ -38,7 +38,7 @@ Ensure Python 3.8+ is installed.
 ```
 If requirements.txt is unavailable:
 ```bash
-    pip install paho-mqtt scipy matplotlib numpy
+    pip install paho-mqtt scipy matplotlib numpy send2trash
 ```
 These libraries are used for: - MQTT communication (real-time data
 streaming) - Signal processing and dataset handling - Visualization of
