@@ -1,90 +1,121 @@
-Project Setup and Execution Guide
+"""# IMU_FSR_Sensor_Fusion_For_Exoskeletons
 
-1. Clone Repository
+##Overview
 
-Windows
+This project provides a modular pipeline for collecting, processing, and
+visualizing data from IMU (Inertial Measurement Units) and FSR (Force
+Sensitive Resistor) sensors. It is designed for wearable gait sensing
+applications, enabling accurate capture of anatomical movement for
+exoskeleton technology development.
 
-Open Command Prompt or PowerShell: cd path git clone
-https://github.com/your-repo.git cd your-repo
+The system supports: - Gait analysis of patients - Dataset generation
+for machine learning models - LSTM-based classification and sequence
+modeling - Real-time sensor fusion for biomechanical insights
 
-Linux
+---
 
-Open terminal: cd /path/to/your/projects git clone
-https://github.com/your-repo.git cd your-repo
+## 1. Clone Repository
+
+### Windows
+```bash
+    cd path\to\your\projects
+    git clone https://github.com/your-repo.git
+    cd IMU_FSR_Sensor_Fusion_For_Exoskeletons
+
+### Linux
+```bash
+    cd /path/to/your/projects
+    git clone https://github.com/your-repo.git
+    cd IMU_FSR_Sensor_Fusion_For_Exoskeletons
 
 ------------------------------------------------------------------------
 
-2. Python Environment Setup
+## 2. Python Environment Setup
 
 Ensure Python 3.8+ is installed.
+```bash
+    pip install -r requirements.txt
 
-Install dependencies: pip install -r requirements.txt
+If requirements.txt is unavailable:
+```bash
+    pip install paho-mqtt scipy matplotlib numpy
 
-If requirements.txt is missing, install manually: pip install paho-mqtt
-scipy matplotlib numpy
+These libraries are used for: - MQTT communication (real-time data
+streaming) - Signal processing and dataset handling - Visualization of
+sensor data - Numerical computations
 
 ------------------------------------------------------------------------
 
-3. MQTT Setup (Raspberry Pi Required)
+## 3. MQTT Setup (Raspberry Pi Required)
 
 Overview
 
-System requires a Raspberry Pi acting as MQTT broker and local network
-host.
+A Raspberry Pi acts as a local MQTT broker and network controller.
 
 Steps (High-Level)
 
-1.  Create local network using static IP addressing
-2.  Configure Raspberry Pi with static IP
-3.  Install MQTT broker (e.g., Mosquitto)
-4.  Restrict connections to local IP range only
+1.  Create a local network using static IP addressing
+2.  Assign static IP to Raspberry Pi
+3.  Install and run MQTT broker service
+4.  Restrict access to local IP range
 
 TBD
 
-(Add exact scripts and commands for broker setup here)
+(Add detailed broker setup commands and scripts here)
 
 ------------------------------------------------------------------------
 
-4. ESP32 Firmware Setup
+## 4. ESP32 Firmware Setup
 
-Navigate to: ESP_codes/
+Navigate to:
+```bash
+    ESP_codes/
 
-This contains template firmware: - 2 IMUs (single leg) - 3 FSR sensors
-(foot)
+This folder contains template firmware for: - 2 IMUs (mounted on one
+leg) - 3 FSR sensors (mounted on foot)
 
-Notes: - Adjust sensor count based on your hardware - System currently
-supports: - Hip joint angle estimation - Ground reaction force
-estimation
+Notes: - Modify sensor configuration based on your setup - Current
+implementation supports: - Hip joint angle estimation - Ground reaction
+force approximation
 
-Flash code to ESP32 using Arduino IDE or ESP-IDF.
+Flash using Arduino IDE or ESP-IDF.
 
 ------------------------------------------------------------------------
 
-5. Running the System
+## 5. Running the System
 
-Step 1: Start MQTT Broker (on Raspberry Pi)
+Step 1: Start MQTT Broker (Raspberry Pi)
 
-Step 2: Power ESP32 devices
+Step 2: Power ESP32 Devices
 
 Step 3: Run Python UI
-
-cd main_project_directory python main.py
-
-------------------------------------------------------------------------
-
-6. Expected Behavior
-
--   IMU data streamed via MQTT
--   FSR data streamed via MQTT
--   Python UI subscribes and visualizes:
-    -   Angles
-    -   Forces
-    -   Derived signals
+```bash
+    cd project_root
+    python main.py
 
 ------------------------------------------------------------------------
 
-7. Notes
+## 6. Expected Behavior
 
--   Ensure all devices are on same local network
--   Verify MQTT topics match between ESP and Python
--   Check firewall/network restrictions if connection fails
+-   IMU and FSR data streamed over MQTT
+-   Real-time visualization of:
+    -   Joint angles
+    -   Force signals
+    -   Derived temporal features
+
+------------------------------------------------------------------------
+
+## 7. Use Cases
+
+-   Clinical gait analysis and rehabilitation monitoring
+-   Dataset creation for machine learning pipelines
+-   Training LSTM models for gait phase classification
+-   Development and validation of wearable exoskeleton systems
+
+------------------------------------------------------------------------
+
+8. Notes
+
+-   Ensure all devices are on same network
+-   Verify MQTT topics are consistent
+-   Debug connectivity issues via broker logs
