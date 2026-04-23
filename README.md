@@ -1,6 +1,6 @@
 ### IMU_FSR_Sensor_Fusion_For_Exoskeletons
 
-##Overview
+## Overview
 
 This project provides a modular pipeline for collecting, processing, and
 visualizing data from IMU (Inertial Measurement Units) and FSR (Force
