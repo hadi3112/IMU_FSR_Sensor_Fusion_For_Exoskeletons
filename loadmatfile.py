@@ -1,4 +1,5 @@
-from lib.mat_loader import load_latest
+#loadmatfile.py
+from lib.mat_loader import load_latest, plot_mat_file
 
 # ================= CONFIG =================
 
