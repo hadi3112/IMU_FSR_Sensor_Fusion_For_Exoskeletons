@@ -8,10 +8,9 @@ import matplotlib.pyplot as plt
 from lib.imu_mqtt_handler import MQTTHandler
 from lib.fsr_mqtt_handler import FSRHandler
 
-from lib.imu_visualization import create_angle_plot, create_derivative_plot
+from lib.imu_visualization import create_angle_plot
 from lib.fsr_visualization import create_fsr_plot
 
-# NEW IMPORT
 from lib.data_loader import load_and_plot_latest
 
 
@@ -19,7 +18,7 @@ from lib.data_loader import load_and_plot_latest
 MODE = "IMU"   # "IMU" or "FSR"
 
 # ================= RECORDING CONFIG =================
-RECORD_DURATION = 45  # seconds
+RECORD_DURATION = 45
 recording_started = False
 start_time = None
 
@@ -27,13 +26,14 @@ start_time = None
 # ================= Buffers =================
 buffers = {
 
-    # IMU
+    # ===== ANGLES =====
     "feature": deque(maxlen=2000),
     "t": deque(maxlen=2000),
     "p1": deque(maxlen=2000),
     "p2": deque(maxlen=2000),
     "pavg": deque(maxlen=2000),
 
+    # ===== DERIVATIVES =====
     "dt": deque(maxlen=2000),
     "dx1": deque(maxlen=2000),
     "dy1": deque(maxlen=2000),
@@ -42,7 +42,16 @@ buffers = {
     "dy2": deque(maxlen=2000),
     "dz2": deque(maxlen=2000),
 
-    # FSR
+    # ===== RAW ACCELERATION =====
+    "ax1": deque(maxlen=2000),
+    "ay1": deque(maxlen=2000),
+    "az1": deque(maxlen=2000),
+
+    "ax2": deque(maxlen=2000),
+    "ay2": deque(maxlen=2000),
+    "az2": deque(maxlen=2000),
+
+    # ===== FSR =====
     "fsr_t": deque(maxlen=2000),
     "fsr1": deque(maxlen=2000),
     "fsr2": deque(maxlen=2000),
@@ -73,19 +82,16 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     global recording_started, start_time
 
-    # ===== ALWAYS PRINT RAW PAYLOAD =====
     try:
         print(f"[RAW MQTT] {msg.topic} -> {msg.payload.decode()}")
     except:
         pass
 
-    # ===== START TIMER =====
     if not recording_started:
         recording_started = True
         start_time = time.time()
         print(f"\n[RECORDING STARTED] {RECORD_DURATION} seconds window\n")
 
-    # ===== ROUTING =====
     if msg.topic == "esp32/imu":
         imu_handler.on_message(client, userdata, msg)
 
@@ -114,15 +120,33 @@ def get_next_filename(prefix):
 def save_data():
     imu_file = get_next_filename("IMU_data")
     fsr_file = get_next_filename("FSR_data")
+    accel_file = get_next_filename("IMU_accel")
+    deriv_file = get_next_filename("IMU_derivatives")
 
-    print(f"\n[SAVING] {imu_file}, {fsr_file}")
+    print(f"\n[SAVING] {imu_file}, {fsr_file}, {accel_file}, {deriv_file}")
 
+    # ===== ANGLES =====
     imu_data = {
         "t": list(buffers["t"]),
         "p1": list(buffers["p1"]),
         "p2": list(buffers["p2"]),
         "pavg": list(buffers["pavg"]),
-        "dt": list(buffers["dt"]),
+    }
+
+    # ===== RAW ACCELERATION =====
+    accel_data = {
+        "t": list(buffers["t"]),
+        "ax1": list(buffers["ax1"]),
+        "ay1": list(buffers["ay1"]),
+        "az1": list(buffers["az1"]),
+        "ax2": list(buffers["ax2"]),
+        "ay2": list(buffers["ay2"]),
+        "az2": list(buffers["az2"]),
+    }
+
+    # ===== DERIVATIVES =====
+    deriv_data = {
+        "t": list(buffers["dt"]),
         "dx1": list(buffers["dx1"]),
         "dy1": list(buffers["dy1"]),
         "dz1": list(buffers["dz1"]),
@@ -140,6 +164,8 @@ def save_data():
 
     sio.savemat(imu_file, imu_data)
     sio.savemat(fsr_file, fsr_data)
+    sio.savemat(accel_file, accel_data)
+    sio.savemat(deriv_file, deriv_data)
 
     print("[SAVE COMPLETE]")
 
@@ -148,8 +174,7 @@ def save_data():
 try:
 
     if MODE == "IMU":
-        create_angle_plot(buffers)
-        create_derivative_plot(buffers)
+        create_angle_plot(buffers)   # ✅ ONLY angle plot now
 
     elif MODE == "FSR":
         create_fsr_plot(buffers)
@@ -171,5 +196,4 @@ finally:
     client.disconnect()
     save_data()
 
-    # OPTIONAL: uncomment when needed
     # load_and_plot_latest(MODE)
