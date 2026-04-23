@@ -1,1 +1,6 @@
+# MATLAB files
 *.mat
+
+# Python cache
+__pycache__/
+*.py[cod]
