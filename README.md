@@ -21,13 +21,13 @@ modeling - Real-time sensor fusion for biomechanical insights
     cd path\to\your\projects
     git clone https://github.com/your-repo.git
     cd IMU_FSR_Sensor_Fusion_For_Exoskeletons
-
+```
 ### Linux
 ```bash
     cd /path/to/your/projects
     git clone https://github.com/your-repo.git
     cd IMU_FSR_Sensor_Fusion_For_Exoskeletons
-
+```
 ------------------------------------------------------------------------
 
 ## 2. Python Environment Setup
@@ -35,11 +35,11 @@ modeling - Real-time sensor fusion for biomechanical insights
 Ensure Python 3.8+ is installed.
 ```bash
     pip install -r requirements.txt
-
+```
 If requirements.txt is unavailable:
 ```bash
     pip install paho-mqtt scipy matplotlib numpy
-
+```
 These libraries are used for: - MQTT communication (real-time data
 streaming) - Signal processing and dataset handling - Visualization of
 sensor data - Numerical computations
@@ -70,7 +70,7 @@ TBD
 Navigate to:
 ```bash
     ESP_codes/
-
+```
 This folder contains template firmware for: - 2 IMUs (mounted on one
 leg) - 3 FSR sensors (mounted on foot)
 
@@ -92,7 +92,7 @@ Step 3: Run Python UI
 ```bash
     cd project_root
     python main.py
-
+```
 ------------------------------------------------------------------------
 
 ## 6. Expected Behavior
