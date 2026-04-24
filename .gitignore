@@ -8,3 +8,4 @@ __pycache__/
 # Extra folders
 backup_dataset/
 dataset/
+annotated/
