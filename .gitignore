@@ -4,3 +4,7 @@
 # Python cache
 __pycache__/
 *.py[cod]
+
+# Extra folders
+backup_dataset/
+dataset/
