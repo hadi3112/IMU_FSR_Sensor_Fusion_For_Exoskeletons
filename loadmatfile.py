@@ -3,7 +3,7 @@ from lib.mat_loader import load_latest, plot_mat_file
 
 # ================= CONFIG =================
 
-DATA_TYPE = "IMU"
+DATA_TYPE = "FSR"
 # OPTIONS:
 # "IMU"
 # "FSR"
@@ -29,4 +29,5 @@ else:
 
 # ================= EXECUTION =================
 
-load_latest(prefix)
+# load_latest(prefix)
+plot_mat_file(f"{prefix}_20.mat")
