@@ -119,3 +119,4 @@ Step 3: Run Python UI
 -   Ensure all devices are on same network
 -   Verify MQTT topics are consistent
 -   Debug connectivity issues via broker logs
+# test
