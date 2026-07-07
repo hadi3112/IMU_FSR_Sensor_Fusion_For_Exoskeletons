@@ -1,5 +1,6 @@
-# MATLAB files
+# Data files
 *.mat
+*.mp4
 
 # Python cache
 __pycache__/
@@ -8,3 +9,4 @@ __pycache__/
 # Extra folders
 backup_dataset/
 dataset/
+annotated/

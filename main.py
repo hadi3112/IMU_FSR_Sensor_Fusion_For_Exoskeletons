@@ -10,12 +10,14 @@ from lib.fsr_mqtt_handler import FSRHandler
 
 from lib.imu_visualization import create_angle_plot
 from lib.fsr_visualization import create_fsr_plot
+from lib.combined_visualization import create_combined_plot
+from lib.mock_generator import start_mock_generator
 
 from lib.data_loader import load_and_plot_latest
 
 
 # ================= MODE SELECT =================
-MODE = "IMU"   # "IMU" or "FSR"
+MODE = "MOCK"   # "IMU", "FSR", "BOTH" (real sensors), or "MOCK"
 
 # ================= RECORDING CONFIG =================
 RECORD_DURATION = 45
@@ -70,7 +72,7 @@ fsr_handler = FSRHandler(buffers)
 
 
 # ================= MQTT =================
-client = mqtt.Client()
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
 
 def on_connect(client, userdata, flags, rc):
@@ -102,8 +104,10 @@ def on_message(client, userdata, msg):
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("10.42.0.1", 1883)
-client.loop_start()
+# Skip real MQTT connection in MOCK mode
+if MODE != "MOCK":
+    client.connect("10.42.0.1", 1883)
+    client.loop_start()
 
 
 # ================= FILE NAMING =================
@@ -173,11 +177,18 @@ def save_data():
 # ================= VISUALIZATION =================
 try:
 
-    if MODE == "IMU":
-        create_angle_plot(buffers)   # ✅ ONLY angle plot now
+    if MODE == "MOCK":
+        start_mock_generator(client, on_message)
+        create_combined_plot(buffers)
+
+    elif MODE == "IMU":
+        create_angle_plot(buffers)
 
     elif MODE == "FSR":
         create_fsr_plot(buffers)
+
+    elif MODE == "BOTH":
+        create_combined_plot(buffers)
 
     while True:
 
